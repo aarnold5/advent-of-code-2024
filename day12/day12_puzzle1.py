@@ -1,5 +1,5 @@
 def solve_day12_puzzle1():
-    f = open("inputs/test-day-12.txt", "r")
+    f = open("inputs/day-12.txt", "r")
 
     map = []
 
@@ -9,40 +9,40 @@ def solve_day12_puzzle1():
 
     visited = set()
     to_visit = []
-    regions = {}
-    r_list = {}
+    regions = []
+    region_i = -1
 
     curr_letter = None
     for y in range(len(map)):
         for x in range(len(map[0])):
             if not (x, y) in visited:
-                if not curr_letter:
+                if curr_letter == None:
                     curr_letter = map[y][x]
-                    regions[curr_letter] = [0, 0]
+                    regions.append([0, 0])
+                    region_i += 1
                 to_visit.append((x,y))
-                r_list[curr_letter] = []
 
                 while len(to_visit) > 0:
                     (curr_x, curr_y) = to_visit.pop()
                     if not (curr_x, curr_y) in visited:
-                        r_list[curr_letter].append((curr_x, curr_y))
                         visited.add((curr_x, curr_y))
-                        if len(r_list[curr_letter]) == 1:
-                            regions[curr_letter] = [1, 4]
-                        else:
-                            regions[curr_letter][0] += 1
-                            regions[curr_letter][1] += 4 - 2
+                        # add to the area
+                        regions[region_i][0] += 1
 
+                        num_neighbors_in_same_region = 0
                         neighbors = get_neighbors(curr_x, curr_y, map)
                         for n in neighbors:
                             (nx, ny) = n
                             if map[ny][nx] == curr_letter:
+                                num_neighbors_in_same_region += 1
                                 to_visit.append(n)
+                        # add to the perimeter
+                        regions[region_i][1] += 4 - num_neighbors_in_same_region
             curr_letter = None
 
     total = 0
-    for letter in regions:
-        print(regions[letter])
+    for region in regions:
+        total += region[0] * region[1]
         
     return total
 

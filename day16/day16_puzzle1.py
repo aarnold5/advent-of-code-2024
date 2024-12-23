@@ -69,15 +69,15 @@ def print_map(map):
         print(row)
 
 
-def get_neighbors(x, y, map):
+def get_neighbors(x, y, map, start_symbol):
     neighbors =[]
-    if check_in_bounds(x, y-1, map):
+    if check_in_bounds(x, y-1, map, start_symbol):
         neighbors.append((map[y-1][x], Direction.UP))
-    if check_in_bounds(x-1, y, map):
+    if check_in_bounds(x-1, y, map, start_symbol):
         neighbors.append((map[y][x-1], Direction.LEFT))
-    if check_in_bounds(x+1, y, map):
+    if check_in_bounds(x+1, y, map, start_symbol):
         neighbors.append((map[y][x+1], Direction.RIGHT))
-    if check_in_bounds(x, y+1, map):
+    if check_in_bounds(x, y+1, map, start_symbol):
         neighbors.append((map[y+1][x], Direction.DOWN))
 
     return neighbors
@@ -88,8 +88,8 @@ def print_neighbors(neighbors):
         print(n[0].x, n[0].y, n[0].val)
 
 
-def check_in_bounds(x, y, map):
-    if (x >= 0 and x <= len(map[0])-1 and y >= 0 and y <= len(map)-1) and map[y][x].val != '#' and map[y][x].val != 'S':
+def check_in_bounds(x, y, map, start_symbol):
+    if (x >= 0 and x <= len(map[0])-1 and y >= 0 and y <= len(map)-1) and map[y][x].val != '#' and map[y][x].val != start_symbol:
         return True
     else:
         return False
@@ -97,7 +97,7 @@ def check_in_bounds(x, y, map):
 
 def relax(curr, neighbor, queue):
     (n, n_direction) = neighbor
-    w = get_weight(n_direction, curr.direction)
+    w = get_weight(n_direction, curr.direction, curr.val)
     if (curr.dist + w < n.dist):
         n.dist = curr.dist + w
         n.prev = curr
@@ -105,25 +105,24 @@ def relax(curr, neighbor, queue):
         queue.add_task(n, n.dist)
 
 
-def get_weight(n_direction, curr_direction):
-    if (n_direction == curr_direction):
+def get_weight(n_direction, curr_direction, curr_val):
+    if (n_direction == curr_direction or curr_val == 'E'):
         return 1
     else:
         if n_direction == Direction.UP or n_direction == Direction.DOWN:
             if curr_direction == Direction.LEFT or curr_direction == Direction.RIGHT:
                 return 1 + 1000
             else: 
-                return 1 + 2 * 1000
+                return 0
         elif n_direction == Direction.LEFT or n_direction == Direction.RIGHT:
             if curr_direction == Direction.UP or curr_direction == Direction.DOWN:
                 return 1 + 1000
             else: 
-                return 1 + 2 * 1000
+                return 0
     return
 
-
-def solve_day16_puzzle1():
-    f = open('inputs/test-4-day-16.txt', 'r')
+def get_score(start_symbol, end_symbol):
+    f = open('inputs/day-16.txt', 'r')
 
     map = []
     line_idx = 0
@@ -136,9 +135,9 @@ def solve_day16_puzzle1():
         line = line.strip()
         for i in range(len(line)):
             v = Vertex(i, line_idx, line[i], Direction.RIGHT)
-            if line[i] == 'S':
+            if line[i] == start_symbol:
                 v.dist = 0
-            elif line[i] == 'E':
+            elif line[i] == end_symbol:
                 end = v
 
             if line[i] != '#':
@@ -149,11 +148,23 @@ def solve_day16_puzzle1():
 
     while queue.length > 0:
         curr = queue.pop_task()
-        neighbors = get_neighbors(curr.x, curr.y, map)
+        neighbors = get_neighbors(curr.x, curr.y, map, start_symbol)
         for n in neighbors:
             relax(curr, n, queue)
+
+    if end.val == 'S':
+        if end.direction == Direction.DOWN or end.direction == Direction.UP:
+            end.dist += 1000
+
             
     return end.dist
+
+
+def solve_day16_puzzle1():
+    s_to_e_score = get_score('S', 'E')
+    e_to_s_score = get_score('E', 'S')
+
+    return min(s_to_e_score, e_to_s_score)
 
 
 print(solve_day16_puzzle1())

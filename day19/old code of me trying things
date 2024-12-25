@@ -1,0 +1,240 @@
+# def solve_day19_puzzle1():
+#     f = open("inputs/test-day-19.txt", "r")
+
+#     second_half = False
+
+#     patterns = {}
+#     designs = []
+    
+#     for line in f:
+#         if line == '\n':
+#             second_half = True
+#         elif not second_half:
+#             whole_patterns = line.split(", ")
+#             for p in whole_patterns:
+#                 p = p.strip()
+#                 if p[0] in patterns:
+#                     patterns[p[0]].append(p[1:])
+#                 else:
+#                     patterns[p] = []
+        
+#         else:
+#             designs.append(line.strip())
+#     f.close()
+
+#     print(patterns)
+
+#     valid_count = 0
+#     curr_patt_list = None
+#     for design in designs:
+#         valid = True
+#         i = 0
+#         while i < len(design):
+#             c = design[i]
+#             print(design, i, c)
+#             if c in patterns:
+#                 extra_incr = 0
+#                 found_ends_match = True
+#                 for ends in patterns[c]:
+#                     for ei in range(len(ends)):
+#                         if i+ei+1 < len(design) and ends[ei] == design[i+ei+1]:
+#                             extra_incr += 1
+#                             continue
+#                         else:
+#                             found_ends_match = False
+#                             break
+#                 if len(patterns[c]) > 0 and found_ends_match:
+#                     i += extra_incr    
+#                 i += 1
+#             else:
+#                 print("fkeiwfii")
+#                 valid = False
+#                 break
+
+#         if valid:
+#             valid_count += 1
+
+#     return valid_count #for some reason I'm getting that they are all valid
+
+# print(solve_day19_puzzle1())
+
+
+# def solve_day19_puzzle1():
+#     f = open("inputs/test-day-19.txt", "r")
+
+#     second_half = False
+
+#     designs = []
+#     patterns = set()
+    
+#     for line in f:
+#         if line == '\n':
+#             second_half = True
+#         elif not second_half:
+#             whole_patterns = line.split(", ")
+#             for pattern in whole_patterns:
+#                 patterns.add(pattern.strip())
+        
+#         else:
+#             designs.append(line.strip())
+#     f.close()
+
+#     print(patterns)
+
+#     valid_count = 0
+#     curr_patt_list = None
+#     for design in designs:
+#         valid = True
+        
+#         i = 0
+#         j = i + 1
+#         # length_found = 0
+
+#         while i < len(design):
+#             length_found = 0
+#             while j < len(design):
+#                 print(design[i:j])
+#                 if design[i:j] in patterns:
+#                     length_found += j - i
+#                 else:
+#                     if length_found > 0:
+#                         break
+#                 j += 1 
+
+#             if (i == len(design) - 1):
+#                 if design[i] in patterns:
+#                     break
+
+#             if length_found == 0:
+#                 print("made invalid")
+#                 valid = False
+#                 break
+
+#             if valid == False:
+#                 break
+
+#             i += length_found
+#             j = i + 1
+#             # length_found = 0
+
+#         if valid:
+#             print(design)
+#             valid_count += 1
+
+#     return valid_count #for some reason I'm getting that they are all valid
+
+# print(solve_day19_puzzle1())
+
+# import re
+
+
+# def sort_func(e):
+#   return len(e)
+
+
+# def solve_day19_puzzle1():
+#     f = open("inputs/day-19.txt", "r")
+
+#     second_half = False
+
+#     designs = []
+#     patterns = []
+    
+#     for line in f:
+#         if line == '\n':
+#             second_half = True
+#         elif not second_half:
+#             whole_patterns = line.split(",")
+#             for pattern in whole_patterns:
+#                 patterns.append(pattern.strip())
+        
+#         else:
+#             designs.append(line.strip())
+#     f.close()
+
+#     # print(patterns)
+#     patterns.sort(key=sort_func, reverse=True)
+#     # print(patterns)
+#     # print(len(patterns))
+#     # print(len(designs))
+
+#     valid_count = 0 
+#     for design in designs:
+#         # print(design)
+#         i = 0
+#         i_to_add = 0
+#         valid = True
+#         pattern_matches = {}
+#         while i < len(design):
+#             found_match = False
+#             for pattern in patterns:
+#                 lp = len(pattern)
+#                 # print(pattern, design[i:i+lp])
+#                 if design[i:i+lp] == pattern:
+#                     found_match = True
+#                     if i not in pattern_matches:
+#                         pattern_matches[i] = []
+#                         i_to_add += lp
+#                     else:
+#                         pattern_matches[i].append(pattern)
+#                     # print("--------")
+#             if found_match == False:
+#                 # print("made invalid")
+#                 print(design)
+#                 valid = False
+#                 break
+#             i += i_to_add
+
+#         if valid:
+#             valid_count += 1
+#         else:
+#             print(pattern_matches)
+            
+
+#     return valid_count #this fails because in some cases you do want to go for a smaller one in order for the others to fit properly
+#           # might need to save all the possible matches and then come back to them if the thing fails
+ 
+# print(solve_day19_puzzle1())
+
+
+# def solve_day19_puzzle1():
+#     f = open("inputs/day-19.txt", "r")
+
+#     second_half = False
+
+#     designs = []
+#     patterns = []
+    
+#     for line in f:
+#         if line == '\n':
+#             second_half = True
+#         elif not second_half:
+#             whole_patterns = line.split(",")
+#             for pattern in whole_patterns:
+#                 patterns.append(pattern.strip())
+        
+#         else:
+#             designs.append(line.strip())
+#     f.close()
+
+#     # print(patterns)
+#     patterns.sort(key=sort_func, reverse=True)
+#     # print(patterns)
+#     # print(len(patterns))
+#     # print(len(designs))
+
+#     valid_count = 0 
+#     for design in designs:
+#         # print(design)
+#         valid = True
+#         for pattern in patterns:
+#             if pattern in design:
+#                 matches = re.findall(pattern, design)
+#                 print(matches.)
+
+#         if valid:
+#             valid_count += 1
+
+#     return valid_count #this fails because in some cases you do want to go for a smaller one in order for the others to fit properly
+ 
+# print(solve_day19_puzzle1())

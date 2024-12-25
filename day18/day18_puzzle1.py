@@ -1,4 +1,3 @@
-from collections import deque
 import heapq
 
 
@@ -59,14 +58,10 @@ def solve_day18_puzzle1(grid_width, bytes_fallen, file_name):
 
     queue = []
     seen_to_cost = {}
+    
     heapq.heappush(queue, (0+get_manhattan_dist(start, end), start[0], start[1], 0))
     seen_to_cost[start] = 0
     back_track = {start: None}
-
-    print(start)
-    print(end)
-    print(grid)
-    print('\n')
 
     while len(queue) > 0:
         (cost_est, x, y, cost) = heapq.heappop(queue)

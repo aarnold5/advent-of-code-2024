@@ -1,5 +1,3 @@
-from enum import Enum
-import heapq
 import re
 
 
@@ -15,13 +13,13 @@ def get_instructions(line, paths):
         if i > 0:
             start = line[i-1]
         end = line[i]
-        # print("instruct", start, end)
         
         if start != end:
             instructions += paths[start][end] + 'A'
         else:
             instructions += 'A'
     return instructions
+
 
 def solve_day21_puzzle1():
 
@@ -35,8 +33,8 @@ def solve_day21_puzzle1():
             '1': 'vv',
             '2': 'vv>',
             '3': 'vv>>',
-            '0': '>vvv', #
-            'A': '>>vvv', #
+            '0': '>vvv',
+            'A': '>>vvv',
         },
         '8': {
             '7': '<',
@@ -135,10 +133,10 @@ def solve_day21_puzzle1():
             'A': 'v',
         },
         '0': {
-            '7': '^^^<',#
+            '7': '^^^<',
             '8': '^^^',
             '9': '^^^>',
-            '4': '^^<',#
+            '4': '^^<',
             '5': '^^',
             '6': '^^>',
             '1': '^<',
@@ -146,7 +144,7 @@ def solve_day21_puzzle1():
             '3': '^>',
             'A': '>',
         },
-        'A': { #
+        'A': {
             '7': '^^^<<', 
             '8': '<^^^',
             '9': '^^^',
@@ -165,12 +163,12 @@ def solve_day21_puzzle1():
             'A': '>',
             '<': 'v<',
             'v': 'v',
-            '>': 'v>' #
+            '>': 'v>'
         },
         'A': {
             '^': '<',
             '<': 'v<<',
-            'v': '<v', #
+            'v': '<v',
             '>': 'v'
         },
         '<': {
@@ -181,19 +179,19 @@ def solve_day21_puzzle1():
         },
         'v': {
             '^': '^',
-            'A': '^>', #
+            'A': '^>',
             '<': '<',
             '>': '>'
         },
         '>': {
-            '^': '<^',#
+            '^': '<^',
             'A': '^',
             '<': '<<',
             'v': '<'
         }
     }
 
-    f = open("inputs/test-day-21.txt", "r")
+    f = open("inputs/day-21.txt", "r")
 
     complexities_sum = 0
     for line in f:
@@ -202,10 +200,13 @@ def solve_day21_puzzle1():
 
         numeric_instructions = get_instructions(line, best_numeric_paths)
         print("n", numeric_instructions)
+
         directional_instructions1 = get_instructions(numeric_instructions, best_direction_paths)
         print("d1", directional_instructions1)
+
         directional_instructions2 = get_instructions(directional_instructions1, best_direction_paths)
         print("d2", directional_instructions2)
+
         print(len(directional_instructions2), num)
         complexities_sum += num * len(directional_instructions2)
 

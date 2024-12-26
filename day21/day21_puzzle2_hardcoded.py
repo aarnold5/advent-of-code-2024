@@ -23,22 +23,18 @@ def get_instructions(line, paths):
 
 def dfs(line, path, seen_before, depth):
     if depth == 0:
-        # print("end of branch", line, len(line))
         return len(line)
     
     if (line, depth) in seen_before:
-        # print("found end of branch", line, len(line))
         return seen_before[(line, depth)]
     
     total = 0
     parts = line.split("A")
-    # print(parts)
     for i in range(len(parts)):
         part = parts[i]
         if i != len(parts) - 1:
             part = part + 'A'
             instructions = get_instructions(part, path)
-            # print(part, depth, instructions)
             total += dfs(instructions, path, seen_before, depth-1)
     seen_before[(line, depth)] = total
         
@@ -223,10 +219,8 @@ def solve_day21_puzzle1():
         num = int(re.sub("\D", "", line))
 
         numeric_instructions = get_instructions(line, best_numeric_paths)
-        # print("n", numeric_instructions)
 
         len = dfs(numeric_instructions, best_direction_paths, {}, 25)
-        # print("d2", len)
 
         complexities_sum += num * len
 

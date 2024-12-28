@@ -1,6 +1,4 @@
 def check_connections(current_group, current_group_neighbors, potential_members, connections_map, curr_max_group):
-    print(current_group, current_group_neighbors, potential_members, curr_max_group)
-    print('\n')
     if len(potential_members) == 0:
         if len(current_group) <= len(curr_max_group):
             current_group.pop()
@@ -23,7 +21,6 @@ def check_connections(current_group, current_group_neighbors, potential_members,
     
     for member in potential_members:
         if member not in current_group:
-            # print(current_group_neighbors, connections_map[member])
             shared = set.intersection(*current_group_neighbors).intersection(connections_map[member])
             current_group.append(member)
             current_group_neighbors.append(connections_map[member])
@@ -38,7 +35,6 @@ def solve_day23_puzzle1():
     f = open("inputs/day-23.txt", "r")
 
     connections = {}
-    sets = set()
     for line in f:
         computers = line.strip().split("-")
         if computers[0] not in connections:
@@ -58,7 +54,6 @@ def solve_day23_puzzle1():
         if not max_group:
             max_group = set(current_group)
         this_max = check_connections(current_group, current_group_neighbors, potential_members, connections, max_group)
-        print("This Group", current_group, this_max)
         if len(this_max) > len(max_group):
             max_group = this_max
 
